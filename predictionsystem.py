@@ -45,7 +45,7 @@ def main():
         # Display predictions
         st.write("Predictions:")
         st.write("Number of normal sinus rhythm: ",prediction_counts.get(1,0))
-        st.write("Number of ventricular beates: ",prediction_counts.get(4,0))
+        st.write("Number of ventricular beats: ",prediction_counts.get(4,0))
 
 if __name__ == "__main__":
     main()
