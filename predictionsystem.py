@@ -35,7 +35,7 @@ def main():
         st.write(data)
 
         # Load pre-trained model
-        model_path = "C:/Users/Abhiram Vijayakumar/Downloads/fin_model2.sav"  # Replace with the path to your pre-trained model
+        model_path = "fin_model2.sav"  # Replace with the path to your pre-trained model
         model = load_model(model_path)
 
         # Make predictions
