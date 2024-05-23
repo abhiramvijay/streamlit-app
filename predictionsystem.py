@@ -5,6 +5,7 @@ from collections import Counter
 from sklearn import preprocessing
 import pymongo
 from pymongo import MongoClient
+import matplotlib.pyplot as plt
 
 
 client = MongoClient()
@@ -21,7 +22,6 @@ def load_model(model_path):
 
 # Function to make predictions using the loaded model
 def predict(model, data):
-    # Assuming your model accepts pandas DataFrame as input
     scaler=preprocessing.MinMaxScaler()
     modelsc=scaler.fit(data)
     scaled_data=modelsc.transform(data)
@@ -39,23 +39,9 @@ def main():
             url=patient_data['file_url']
             url='https://drive.google.com/uc?id='+url.split('/')[-2]
             data=pd.read_csv(url)
-
-    # Upload CSV file
-    # uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
-    # if uploaded_file is not None:
-    #     data = pd.read_csv(uploaded_file)
-
-    #     # Display uploaded data
-    #     st.write("Uploaded Data:")
-    #     st.write(data)
-
-        # Load pre-trained model
-            model_path = "fin_model2.sav"  # Replace with the path to your pre-trained model
+     # Load pre-trained model
+            model_path = "fin_model2.sav"  
             model = load_model(model_path)
-    # url='https://drive.google.com/file/d/1VXHoENEoaiqsOAFKBQaWlbFh1Z664S_F/view?usp=sharing'
-    # url='https://drive.google.com/uc?id=' + url.split('/')[-2]
-    # data = pd.read_csv(url)
-
     # Make predictions
             predictions = predict(model, data)
             prediction_counts=Counter(predictions)
@@ -64,8 +50,11 @@ def main():
             st.write("Predictions:")
             st.write("Patient No:- ",patient_data['p_id'])
             st.write("Patient Name:- ",patient_data['p_name'])
-            st.write("Number of normal sinus rhythm: ",prediction_counts.get(1,0))
-            st.write("Number of ventricular beats: ",prediction_counts.get(4,0))
+            st.write("Number of normal sinus rhythm:- ",prediction_counts.get(1,0))
+            st.write("Number of ventricular beats:- ",prediction_counts.get(4,0))
+            st.write("Number of Superventricular beats:- ",prediction_counts.get(3,0))
+            st.write("Number of fusion beats:- ",prediction_counts.get(0,0))
+            st.write("Number of unclassifiable beats :- ",prediction_counts.get(2,0))
         else:
             st.write("Patient not found.")
 
