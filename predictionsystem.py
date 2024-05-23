@@ -5,7 +5,7 @@ from collections import Counter
 from sklearn import preprocessing
 import pymongo
 from pymongo import MongoClient
-import matplotlib.pyplot as plt
+
 
 
 client = MongoClient()
