@@ -11,7 +11,7 @@ def main():
     if st.button("Predict"):
         try:
             # Fetch patient data
-            response = requests.get("http://127.0.0.1:5000/get_patient_data", params={'patient_number': patient_number})
+            response = requests.get("https://edcd-predictor.onrender.com/get_patient_data", params={'patient_number': patient_number})
             response.raise_for_status()  # Raise an HTTPError for bad responses
             data = response.json()
             
@@ -20,7 +20,7 @@ def main():
                 patient_df = pd.DataFrame(data['data'])
                 
                 # Make prediction
-                prediction_response = requests.post("http://127.0.0.1:5000/predict", json={'data': patient_df.to_dict()})
+                prediction_response = requests.post("https://edcd-predictor.onrender.com/predict", json={'data': patient_df.to_dict()})
                 prediction_response.raise_for_status()  # Raise an HTTPError for bad responses
                 predictions = prediction_response.json()
                 
