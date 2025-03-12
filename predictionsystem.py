@@ -7,7 +7,7 @@ import pymongo
 from pymongo import MongoClient
 import matplotlib.pyplot as plt
 import numpy as np
-
+import google.generativeai as genai
 
 
 client = MongoClient()
@@ -29,6 +29,26 @@ def predict(model, data):
     scaled_data=modelsc.transform(data)
     predictions = model.predict(scaled_data)
     return predictions
+
+def get_gemini_summary(prediction_counts):
+    genai.configure(api_key='AIzaSyBWP1r30Itvz7wf2Ywvv49V-kjv4UCXKSE')
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    prompt = f"""
+    As a medical expert, analyze these ECG beat patterns and provide a concise clinical summary:
+    - Normal sinus rhythm beats: {prediction_counts.get(1,0)}
+    - Ventricular beats: {prediction_counts.get(4,0)}
+    - Superventricular beats: {prediction_counts.get(3,0)}
+    - Fusion beats: {prediction_counts.get(0,0)}
+    - Unclassifiable beats: {prediction_counts.get(2,0)}
+    
+    Focus on:
+    1. The overall heart rhythm quality
+    2. Any concerning patterns
+    3. Potential clinical implications
+    Keep the response brief and clinically relevant.
+    """
+    response = model.generate_content(prompt)
+    return response.text
     
 
 # Main function to run the Streamlit app
@@ -57,6 +77,14 @@ def main():
             st.write("Number of Superventricular beats:- ",prediction_counts.get(3,0))
             st.write("Number of fusion beats:- ",prediction_counts.get(0,0))
             st.write("Number of unclassifiable beats :- ",prediction_counts.get(2,0))
+
+            # Get and display Gemini's analysis
+            st.write("### AI Analysis of Beat Patterns")
+            try:
+                summary = get_gemini_summary(prediction_counts)
+                st.write(summary)
+            except Exception as e:
+                st.error(f"Could not generate AI summary. Error: {str(e)}")
 
             # Debug: Print DataFrame information
             st.write("### Data Structure")
