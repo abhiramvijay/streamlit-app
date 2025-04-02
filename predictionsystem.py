@@ -62,7 +62,8 @@ def main():
             url='https://drive.google.com/uc?id='+url.split('/')[-2]
             data=pd.read_csv(url)
      # Load pre-trained model
-            model_path = "fin_model2.sav"  
+            # model_path = "fin_model2.sav" 
+            model_path="project_final_ecg.sav"
             model = load_model(model_path)
     # Make predictions
             predictions = predict(model, data)
